@@ -4,7 +4,10 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
-require('./bootstrap');
+
+import {AuthState} from "./context/auth/AuthState";
+
+require('./base');
 
 /**
  * Next, we will create a fresh React component instance and attach it to
@@ -14,19 +17,29 @@ require('./bootstrap');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createBrowserHistory } from "history";
-import { Router, Route, Switch } from "react-router-dom";
+import {createBrowserHistory} from "history";
+import {Router, Route, Switch} from "react-router-dom";
 
+import {AboutPage} from "./views/AboutPage/AboutPage";
 import {HomePage} from "./views/HomePage/HomePage";
+import {SignInPage} from "./views/SignInPage/SignInPage";
+import {SignUpPage} from "./views/SignUpPage/SignUpPage";
+import {NotFoundPage} from "./views/404Page/404Page";
 
 var hist = createBrowserHistory();
 
 ReactDOM.render(
-    <Router history={hist}>
-        <Switch>
-            <Route path="/" component={HomePage} />
-        </Switch>
-    </Router>,
+    <AuthState>
+        <Router history={hist}>
+            <Switch>
+                <Route path="/" component={HomePage} exact/>
+                <Route path="/about" component={AboutPage} exact/>
+                <Route path="/sign-in" component={SignInPage} exact/>
+                <Route path="/sign-up" component={SignUpPage} exact/>
+                <Route path="*" component={NotFoundPage} exact/>
+            </Switch>
+        </Router>
+    </AuthState>,
     document.getElementById("root")
 );
 

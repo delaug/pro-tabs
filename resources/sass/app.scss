@@ -1,0 +1,23 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin-bottom: 80px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    line-height: 0px;
+    box-sizing: border-box;
+}
+.uk-nav, .uk-nav ul {
+    list-style: none;
+}

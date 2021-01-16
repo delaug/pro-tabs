@@ -1,3 +1,5 @@
+import {appURL} from "./variables/general";
+
 window._ = require('lodash');
 
 /**
@@ -10,7 +12,7 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
+    //require('bootstrap');
 } catch (e) {}
 
 /**
@@ -20,7 +22,7 @@ try {
  */
 
 window.axios = require('axios');
-window.axios.defaults.baseURL = 'http://pro-tabs.loc/';
+window.axios.defaults.baseURL = appURL;
 window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.withCredentials = true;
