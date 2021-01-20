@@ -1,10 +1,14 @@
 import React, {useContext} from 'react'
-import {appName} from '../../variables/general'
+import {appName, appLanguages, appDefaultLanguage} from '../../variables/general'
 import {NavLink, useHistory} from "react-router-dom";
 import {AuthContext} from "../../context/auth/authContext";
+import {useTranslation} from "react-i18next";
+import {GetLocaleURL} from "../../i18n";
 
 export const Header = () => {
     const history = useHistory()
+    const {t, i18n} = useTranslation()
+
     const isActive = link => {return history.location.pathname === link ? 'uk-active' : ''}
     const {token, user, logout} = useContext(AuthContext)
 
@@ -26,6 +30,16 @@ export const Header = () => {
         })
     }
 
+    const handlerChangeLanguage = lng => {
+        let pattern = appLanguages.map(i => ('(^/'+i+')')).join('|')
+        let reg = new RegExp(pattern)
+        let l = history.location.pathname.replace(reg,'')
+
+        i18n.changeLanguage(lng)
+
+        history.push(GetLocaleURL(l))
+    }
+
     return (
         <nav className="uk-navbar-container">
             <div className="uk-container">
@@ -34,16 +48,16 @@ export const Header = () => {
 
                         <NavLink
                             className="uk-navbar-item uk-logo"
-                            to={'/'}
+                            to={GetLocaleURL('/')}
                             exact
                         >
                             {appName}
                         </NavLink>
 
                         <ul className="uk-navbar-nav">
-                            <li className={isActive('/')}>
+                            <li className={isActive(GetLocaleURL('/'))}>
                                 <NavLink
-                                    to={'/'}
+                                    to={GetLocaleURL('/')}
                                     exact
                                 >
                                     Tabs
@@ -51,9 +65,9 @@ export const Header = () => {
                             </li>
                             <li><a href="#">New</a></li>
                             <li><a href="#">Popular</a></li>
-                            <li className={isActive('/about')}>
+                            <li className={isActive(GetLocaleURL('/about'))}>
                                 <NavLink
-                                    to={'/about'}
+                                    to={GetLocaleURL('/about')}
                                     exact
                                 >
                                     About
@@ -64,22 +78,33 @@ export const Header = () => {
                     </div>
                     <div className="uk-navbar-right">
 
+                        <button className="uk-button uk-button-default tm-lang" type="button">
+                            <span className={'tm-flag ' + i18n.language}></span>{i18n.language}
+                        </button>
+                        <div uk-dropdown="mode: click" className="tm-lang-dropdown">
+                            <ul className="uk-nav uk-dropdown-nav">
+                                {appLanguages.map((lng) => (
+                                    <li key={lng}>
+                                        <a onClick={()=>handlerChangeLanguage(lng)}><span className={'tm-flag ' + lng}></span>{lng}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
                         <a className="uk-navbar-toggle" href="#" aria-expanded="false">
                             <span className="uk-margin-small-right">{user ? user.name : 'Menu'}</span>
                             <span className="uk-margin-small-right uk-icon" uk-icon="user"></span>
                         </a>
-
                         <div className="uk-navbar-dropdown uk-navbar-dropdown-bottom-right"
                              uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x"
                              style={{left: '380px', top: '80px'}}
                         >
-
                         {(!token) ? (
                             <ul className="uk-nav uk-nav-default uk-nav-parent-icon">
                                 <li className="uk-nav-header">Menu</li>
                                 <li>
                                     <NavLink
-                                        to={'/sign-up'}
+                                        to={GetLocaleURL('/sign-up')}
                                         exact
                                     >
                                         <span className="uk-margin-small-right" uk-icon="icon: user"></span>
@@ -88,7 +113,7 @@ export const Header = () => {
                                 </li>
                                 <li>
                                     <NavLink
-                                        to={'/sign-in'}
+                                        to={GetLocaleURL('/sign-in')}
                                         exact
                                     >
                                         <span className="uk-margin-small-right" uk-icon="icon: sign-in"></span>

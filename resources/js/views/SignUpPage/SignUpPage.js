@@ -2,6 +2,7 @@ import React, {useState, useContext} from 'react'
 import {appName} from "../../variables/general"
 import {NavLink, useHistory} from "react-router-dom";
 import {AuthContext} from "../../context/auth/authContext";
+import {GetLocaleURL} from "../../i18n";
 
 const useRegistrationForm = () => {
     const [values, setValues] = useState({
@@ -42,11 +43,11 @@ const useRegistrationForm = () => {
                         pos: 'top-right',
                         timeout: 2000
                     });
-                    history.push('/')
+                    history.push(GetLocaleURL('/'))
                 })
                 .catch(error => {
                     setLoading(false)
-                    if(typeof error === 'object')
+                    if(error.response.data.errors != undefined)
                         setErrors(error.response.data.errors)
                     else
                         UIkit.notification({
@@ -98,10 +99,10 @@ export const SignUpPage = () => {
             <div className="uk-card uk-card-default uk-card-hover uk-card-body uk-width-large">
                 <NavLink
                     className="uk-flex uk-flex-center"
-                    to={'/'}
+                    to={GetLocaleURL('/')}
                     exact
                 >
-                    <img src="favicon.ico" alt=""/>
+                    <img src="/favicon.ico" alt=""/>
                 </NavLink>
                 <p className="uk-card-title uk-flex uk-flex-center"> Sign up to {appName}</p>
                 <form className="uk-form-stacked">

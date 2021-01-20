@@ -20,12 +20,16 @@
         "popper.js": "^1.12",
         "postcss": "^8.1.14",
         "prop-types": "^15.7.2",
+        "react-i18next": "^11.8.5",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
-        "react-i18next": "^11.8.5",
         "react-router-dom": "^5.2.0",
         "resolve-url-loader": "^3.1.2",
         "sass": "^1.32.4",
         "sass-loader": "^8.0.0"
+    },
+    "dependencies": {
+        "i18next": "^19.8.4",
+        "i18next-browser-languagedetector": "^6.0.1"
     }
 }

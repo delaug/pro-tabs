@@ -20,3 +20,31 @@ body {
   list-style: none;
 }
 
+/* Lang */
+
+.tm-lang {
+  border: unset;
+  padding: 0 10px;
+}
+
+.tm-lang-dropdown {
+  min-width: unset;
+}
+
+.tm-flag {
+  display: inline-table;
+  width: 16px;
+  height: 16px;
+  position: relative;
+  top: 3px;
+  right: 3px;
+}
+
+.en {
+  background-image: url("/img/flags/en-icon-16.png");
+}
+
+.ru {
+  background-image: url("/img/flags/ru-icon-16.png");
+}
+
