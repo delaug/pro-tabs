@@ -15,13 +15,20 @@ use App\Http\Controllers\API\AuthController;
 |
 */
 
-Route::prefix('v1')->group( function() {
+Route::prefix('v1')->middleware(['localization'])->group( function() {
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
 
     Route::middleware('auth:sanctum')->group( function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('tokens', [AuthController::class, 'tokens'])->name('tokens');
+    });
+
+    Route::get('test', function (Request $request) {
+        return response()->json([
+            'locale' => app()->getLocale(),
+            'locale_list' => config('app.locale_list'),
+        ]);
     });
 });
 
