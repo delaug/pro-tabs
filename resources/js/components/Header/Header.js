@@ -41,7 +41,7 @@ export const Header = () => {
     }
 
     return (
-        <nav className="uk-navbar-container">
+        <nav class="uk-navbar-container" uk-navbar>
             <div className="uk-container">
                 <div uk-navbar="" className="uk-navbar">
                     <div className="uk-navbar-left">
@@ -78,9 +78,9 @@ export const Header = () => {
                     </div>
                     <div className="uk-navbar-right">
 
-                        <button className="uk-button uk-button-default tm-lang" type="button">
+                        <a className="uk-navbar-toggle" href="#" aria-expanded="false">
                             <span className={'tm-flag ' + i18n.language}></span>{i18n.language}
-                        </button>
+                        </a>
                         <div uk-dropdown="mode: click" className="tm-lang-dropdown">
                             <ul className="uk-nav uk-dropdown-nav">
                                 {appLanguages.map((lng) => (

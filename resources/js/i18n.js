@@ -16,16 +16,6 @@ const resources = {
     }
 }
 
-/*i18n.on('languageChanged', function (lng) {
-    // if the language we switched to is the default language we need to remove the /en from URL
-    if (lng === i18n.options.fallbackLng[0]) {
-        if (window.location.pathname.includes('/' + i18n.options.fallbackLng[0])) {
-            const newUrl = window.location.pathname.replace('/' + i18n.options.fallbackLng[0], '')
-            window.location.replace(newUrl)
-        }
-    }
-})*/
-
 i18n
     .use(initReactI18next ) // passes i18n down to react-i18next
     .use(LanguageDetector )
@@ -47,6 +37,7 @@ i18n
 
 export default i18n;
 
+// Return link with locale /*LANGUAGE*/about
 export const GetLocaleURL = path => {
     if(i18n.language != appDefaultLanguage)
         return  '/'+i18n.language+path

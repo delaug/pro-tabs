@@ -33,19 +33,19 @@ const base = '/:locale('+appLanguages.join('|')+')?'
 
 ReactDOM.render(
     <React.StrictMode>
-    <Suspense fallback={<div uk-spinner="ratio: 1"></div>}>
-        <AuthState>
-            <Router history={hist}>
-                <Switch>
-                    <Route path={base + "/"} component={HomePage} exact/>
-                    <Route path={base + "/about"} component={AboutPage} exact/>
-                    <Route path={base + "/sign-in"} component={SignInPage} exact/>
-                    <Route path={base + "/sign-up"} component={SignUpPage} exact/>
-                    <Route path="*" component={NotFoundPage} exact/>
-                </Switch>
-            </Router>
-        </AuthState>
-    </Suspense>
+        <Suspense fallback={<div uk-spinner="ratio: 1"></div>}>
+            <AuthState>
+                <Router history={hist}>
+                    <Switch>
+                        <Route path={base + "/"} component={HomePage} exact/>
+                        <Route path={base + "/about"} component={AboutPage} exact/>
+                        <Route path={base + "/sign-in"} component={SignInPage} exact/>
+                        <Route path={base + "/sign-up"} component={SignUpPage} exact/>
+                        <Route path="*" component={NotFoundPage} exact/>
+                    </Switch>
+                </Router>
+            </AuthState>
+        </Suspense>
     </React.StrictMode>
     ,document.getElementById("root")
 );
