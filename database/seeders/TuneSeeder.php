@@ -14,6 +14,6 @@ class TuneSeeder extends Seeder
      */
     public function run()
     {
-        Tune::factory(5)->create();
+        Tune::factory(6)->create();
     }
 }

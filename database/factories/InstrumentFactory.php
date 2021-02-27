@@ -22,7 +22,7 @@ class InstrumentFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->randomElement(['Guitar', 'Bass', 'MIDI']),
+            'title' => $this->faker->unique()->randomElement(['Guitar', 'Bass', 'MIDI']),
             'created_at' => now(),
             'updated_at' => now(),
         ];

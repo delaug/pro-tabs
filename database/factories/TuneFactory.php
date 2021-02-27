@@ -22,7 +22,7 @@ class TuneFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->randomElement(['Standart', 'Drop C', 'Drop D', 'A D G C', 'D2 A3 F3 C3 G2 D2', 'Open D']),
+            'title' => $this->faker->unique()->randomElement(['Standart', 'Drop C', 'Drop D', 'A D G C', 'D2 A3 F3 C3 G2 D2', 'Open D']),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -15,7 +15,7 @@ class CreateInstrumentsTable extends Migration
     {
         Schema::create('instruments', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 200);
+            $table->string('title', 200)->unique();
             $table->softDeletes();
             $table->timestamps();
         });

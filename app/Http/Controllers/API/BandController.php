@@ -31,7 +31,7 @@ class BandController extends Controller
     public function store(Request $request)
     {
         $data = Validator::make($request->all(), [
-            'name' => ['min:4', 'unique:bands']
+            'name' => ['required', 'unique:bands']
         ]);
 
         if ($data->fails())
@@ -68,7 +68,7 @@ class BandController extends Controller
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Band with id: ' . $id . ' not found!');
 
         $data = Validator::make($request->all(), [
-            'name' => ['min:4', "unique:bands,name,{$id}"]
+            'name' => ['required', "unique:bands,name,{$id}"]
         ]);
 
         if ($data->fails())
@@ -91,7 +91,7 @@ class BandController extends Controller
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Band with id: ' . $id . ' not found!');
 
         if (!$band->delete())
-            return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Band can\'t deleted');
+            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, null, 'Band can\'t deleted');
 
         return ApiHelper::response('success', null, Response::HTTP_OK, 'Band was deleted!');
     }
