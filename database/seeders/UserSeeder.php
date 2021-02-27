@@ -14,11 +14,25 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = new User();
-        $user->name = env('ADMIN_NAME');
-        $user->email = env('ADMIN_EMAIL');
-        $user->email_verified_at = now();
-        $user->password = bcrypt(env('ADMIN_PASSWORD'));
-        $user->save();
+        User::create([
+            'name' => env('ADMIN_NAME'),
+            'email' => env('ADMIN_EMAIL'),
+            'email_verified_at' => now(),
+            'password' => bcrypt(env('ADMIN_PASSWORD')),
+        ]);
+
+        User::create([
+            'name' => 'user',
+            'email' => 'user@loc.ru',
+            'email_verified_at' => now(),
+            'password' => bcrypt('password'),
+        ]);
+
+        User::create([
+            'name' => 'manager',
+            'email' => 'manager@loc.ru',
+            'email_verified_at' => now(),
+            'password' => bcrypt('password'),
+        ]);
     }
 }
