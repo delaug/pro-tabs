@@ -21,6 +21,12 @@ class Track extends Model
         'tab_id',
     ];
 
+    protected $hidden = [
+        'instrument_id',
+        'tune_id',
+        'tab_id',
+    ];
+
     public function tab() {
         return $this->belongsTo(Tab::class);
     }

@@ -14,7 +14,20 @@ class BandSeeder extends Seeder
      */
     public function run()
     {
-        // If you change value more then 15, you need change array values in BandFactory too
-        Band::factory(15)->create();
+        Band::create(['name' => 'Epica']);
+        Band::create(['name' => 'Nightwish']);
+        Band::create(['name' => 'Insomnium']);
+        Band::create(['name' => 'Rage']);
+        Band::create(['name' => 'Эпидемия']);
+        Band::create(['name' => 'Ария']);
+        Band::create(['name' => 'Louna']);
+        Band::create(['name' => 'Engel']);
+        Band::create(['name' => 'Children of Bodom']);
+        Band::create(['name' => 'Ensiferum']);
+        Band::create(['name' => 'Rammstein']);
+        Band::create(['name' => 'Flyleaf']);
+        Band::create(['name' => 'Eluveitie']);
+        Band::create(['name' => 'Three Days Grace']);
+        Band::create(['name' => 'Delain']);
     }
 }

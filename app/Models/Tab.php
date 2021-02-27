@@ -21,6 +21,10 @@ class Tab extends Model
         'band_id',
     ];
 
+    protected $hidden = [
+        'band_id',
+    ];
+
     public function band() {
         return $this->belongsTo(Band::class);
     }
