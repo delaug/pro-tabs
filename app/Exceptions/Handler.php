@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\ApiHelper;
+use Illuminate\Http\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,5 +39,26 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
+     */
+    public function render($request, Throwable $exception)
+    {
+
+        // This will replace our 404 response with
+        // a JSON response.
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Resource not found!');
+        }
+
+        return parent::render($request, $exception);
     }
 }
