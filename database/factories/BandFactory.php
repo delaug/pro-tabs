@@ -22,7 +22,23 @@ class BandFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->firstName,
+            'name' => $this->faker->unique()->randomElement([
+                'Epica',
+                'Nightwish',
+                'Insomnium',
+                'Rage',
+                'Эпидемия',
+                'Ария',
+                'Louna',
+                'Engel',
+                'Children of Bodom',
+                'Ensiferum',
+                'Rammstein',
+                'Flyleaf',
+                'Eluveitie',
+                'Three Days Grace',
+                'Delain',
+            ]),
             'created_at' => now(),
             'updated_at' => now(),
         ];

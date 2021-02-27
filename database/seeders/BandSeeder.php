@@ -14,6 +14,7 @@ class BandSeeder extends Seeder
      */
     public function run()
     {
-        Band::factory(10)->create();
+        // If you change value more then 15, you need change array values in BandFactory too
+        Band::factory(15)->create();
     }
 }
