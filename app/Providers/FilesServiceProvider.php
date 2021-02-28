@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\TabsService;
+use App\Services\FilesService;
 use Illuminate\Support\ServiceProvider;
 
-class TabsServiceProvider extends ServiceProvider
+class FilesServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +14,8 @@ class TabsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('tabsService', function () {
-            return new TabsService();
+        $this->app->bind('filesService', function () {
+            return new FilesService();
         });
     }
 

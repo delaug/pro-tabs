@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Moscow',
 
     /*
     |--------------------------------------------------------------------------
@@ -188,7 +188,7 @@ return [
         /*
          * App
          */
-        App\Providers\TabsServiceProvider::class,
+        App\Providers\FilesServiceProvider::class,
     ],
 
     /*
@@ -243,7 +243,7 @@ return [
         /*
          * App
          */
-        'TabsService' => \App\Services\TabsFacade::class
+        'FilesService' => \App\Services\FilesFacade::class
     ],
 
 ];

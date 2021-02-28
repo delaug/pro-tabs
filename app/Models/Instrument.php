@@ -15,9 +15,7 @@ class Instrument extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'title',
-    ];
+    protected $fillable = ['title'];
 
     public function tracks() {
         $this->hasMany(Track::class);

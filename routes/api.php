@@ -8,6 +8,7 @@ use App\Http\Controllers\API\InstrumentController;
 use App\Http\Controllers\API\TuneController;
 use App\Http\Controllers\API\TabController;
 use App\Http\Controllers\API\TrackController;
+use App\Http\Controllers\API\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,8 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
         'tunes' => TuneController::class,
         'tracks' => TrackController::class,
     ]);
+
+    Route::post('files/upload', [FileController::class, 'upload']);
+    Route::post('files/move', [FileController::class, 'move']);
 });
 

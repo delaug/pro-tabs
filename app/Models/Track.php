@@ -15,17 +15,21 @@ class Track extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'instrument_id',
-        'tune_id',
-        'tab_id',
-    ];
+    protected $fillable = ['instrument_id','tune_id','tab_id'];
 
-    protected $hidden = [
-        'instrument_id',
-        'tune_id',
-        'tab_id',
-    ];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['instrument_id','tune_id','tab_id'];
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = ['instrument','tune','tab'];
 
     public function tab() {
         return $this->belongsTo(Tab::class);

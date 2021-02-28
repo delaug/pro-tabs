@@ -15,9 +15,7 @@ class Band extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-    ];
+    protected $fillable = ['name'];
 
     public function tabs() {
         return $this->hasMany(Tab::class);
