@@ -48,6 +48,5 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
     ]);
 
     Route::post('files/upload', [FileController::class, 'upload']);
-    Route::post('files/move', [FileController::class, 'move']);
 });
 

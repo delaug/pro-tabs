@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Helpers\ApiHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Tab;
+use App\Services\FilesFacade;
+use App\Services\FilesService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -39,6 +41,13 @@ class TabController extends Controller
             return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
 
         $tab = Tab::create($data->validated());
+
+        // Set File
+        $src = FilesFacade::move($request->src, $tab->id);
+        if (in_array($src, [FilesService::ERR_TMP_FILE_NOT_FOUND, FilesService::ERR_TAB_FILE_EXIST, FilesService::ERR_CANT_MOVE]))
+            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'File move error', FilesFacade::getErrorText($src));
+        else
+            $tab->update(['src' => $src]);
 
         return ApiHelper::response('success', Tab::find($tab->id), Response::HTTP_CREATED, 'Tab success created!');
     }
@@ -78,8 +87,14 @@ class TabController extends Controller
         if ($data->fails())
             return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
 
-
         $tab->update($data->validated());
+
+        // Set file
+        $src = FilesFacade::move($request->src, $tab->id, true);
+        if (in_array($src, [FilesService::ERR_TMP_FILE_NOT_FOUND, FilesService::ERR_TAB_FILE_EXIST, FilesService::ERR_CANT_MOVE]))
+            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'File move error', FilesFacade::getErrorText($src));
+        else
+            $tab->update(['src' => $src]);
 
         return ApiHelper::response('success', Tab::find($tab->id), Response::HTTP_CREATED, 'Tab success updated!');
     }

@@ -5,6 +5,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use phpDocumentor\Reflection\Types\String_;
 
 class FilesService
 {
@@ -14,6 +15,7 @@ class FilesService
 
     public $tmpPath = 'public/tmp';
     public $tabsPath = 'public/tabs';
+    public $spacer = '_';
 
     /**
      * Expire in seconds
@@ -46,7 +48,7 @@ class FilesService
      */
     public function upload(UploadedFile $file)
     {
-        $url = $file->storeAs($this->tmpPath, now()->format('YmdHis') . '_' . $file->getClientOriginalName());
+        $url = $file->storeAs($this->tmpPath, now()->format('YmdHis') . $this->spacer . $file->getClientOriginalName());
         return ['url' => str_replace($this->tmpPath . '/', '', $url)];
     }
 
@@ -55,25 +57,34 @@ class FilesService
      *
      * @param $url
      * @param $tab_id
+     * @param bool $force
      * @return int|string
      */
-    public function move($url, $tab_id)
+    public function move($url, $tab_id, $force = false)
     {
         // Check tmp file
         if (!Storage::exists("{$this->tmpPath}/{$url}"))
             return self::ERR_TMP_FILE_NOT_FOUND;
 
         $fullName = preg_replace("/.*\//", '', $url);
-        $fileData = explode('_', $fullName);
+        preg_match('/(\d{14})_(.*)/',$fullName,$fileData);
 
-        // Check tab file
-        if (Storage::exists("{$this->tabsPath}/{$tab_id}/{$fileData[1]}"))
-            return self::ERR_TAB_FILE_EXIST;
+        /*
+         *  1. Get error if exist
+         *  2. Remove file and move new file after that
+         */
+        if(!$force) {
+            // Check tab file
+            if (Storage::exists("{$this->tabsPath}/{$tab_id}/{$fileData[2]}"))
+                return self::ERR_TAB_FILE_EXIST;
+        } else {
+            self::delete("{$this->tabsPath}/{$tab_id}/{$fileData[2]}");
+        }
 
-        if (!Storage::move("{$this->tmpPath}/{$url}", "{$this->tabsPath}/{$tab_id}/{$fileData[1]}"))
+        if (!Storage::move("{$this->tmpPath}/{$url}", "{$this->tabsPath}/{$tab_id}/{$fileData[2]}"))
             return self::ERR_CANT_MOVE;
         else
-            return "{$this->tabsPath}/{$tab_id}/{$fileData[1]}";
+            return "{$this->tabsPath}/{$tab_id}/{$fileData[2]}";
     }
 
     /**
@@ -86,12 +97,22 @@ class FilesService
         // Check tmp files
         foreach ($tmpFiles as $tmpFile) {
             $fullName = preg_replace("/.*\//", '', $tmpFile);
-            $fileData = explode('_', $fullName);
+            preg_match('/(\d{14})_(.*)/',$fullName,$fileData);
 
             // Delete expired file
-            if(now() > Carbon::createFromFormat('YmdHis',$fileData[0])->addSecond($this->expire))
+            if (now() > Carbon::createFromFormat('YmdHis', $fileData[1])->addSecond($this->expire))
                 Storage::delete($tmpFile);
         }
 
+    }
+
+    /**
+     *  Delete file if exist
+     *
+     * @param string $url
+     */
+    public function delete($url)
+    {
+        Storage::exists($url) && Storage::delete($url);
     }
 }
