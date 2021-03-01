@@ -31,6 +31,9 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
     });
 
     Route::get('test', function (Request $request) {
+
+        \App\Services\FilesFacade::import();
+
         return response()->json([
             'locale' => app()->getLocale(),
             'locale_list' => config('app.locale_list'),
