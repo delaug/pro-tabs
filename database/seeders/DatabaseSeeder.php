@@ -14,12 +14,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-        FilesFacade::import();
+        switch(env('SEED_MODE')) {
+            case 'production':
+                FilesFacade::import();
+                break;
+            case 'dev':
+                FilesFacade::import(200, true);
+                break;
+        }
 
         $this->call([
-            //BandSeeder::class,
-            //TabSeeder::class,
+            BandSeeder::class,
+            TabSeeder::class,
             UserSeeder::class,
             TuneSeeder::class,
             InstrumentSeeder::class,

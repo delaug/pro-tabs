@@ -14,6 +14,7 @@ class InstrumentSeeder extends Seeder
      */
     public function run()
     {
-        Instrument::factory(3)->create();
+        if( env('SEED_MODE') === 'dev')
+            Instrument::factory(3)->create();
     }
 }

@@ -21,18 +21,20 @@ class UserSeeder extends Seeder
             'password' => bcrypt(env('ADMIN_PASSWORD')),
         ]);
 
-        User::create([
-            'name' => 'user',
-            'email' => 'user@loc.ru',
-            'email_verified_at' => now(),
-            'password' => bcrypt('password'),
-        ]);
+        if( env('SEED_MODE') === 'dev') {
+            User::create([
+                'name' => 'user',
+                'email' => 'user@loc.ru',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'),
+            ]);
 
-        User::create([
-            'name' => 'manager',
-            'email' => 'manager@loc.ru',
-            'email_verified_at' => now(),
-            'password' => bcrypt('password'),
-        ]);
+            User::create([
+                'name' => 'manager',
+                'email' => 'manager@loc.ru',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'),
+            ]);
+        }
     }
 }

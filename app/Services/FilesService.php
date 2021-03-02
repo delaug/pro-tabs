@@ -7,7 +7,6 @@ use App\Models\Tab;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use phpDocumentor\Reflection\Types\String_;
 
 class FilesService
 {
@@ -119,11 +118,34 @@ class FilesService
         Storage::exists($url) && Storage::delete($url);
     }
 
+
     /**
-     *  Import tabs, bands from files.
-     *  Search file into $importCatalog
+     * Parse string, first char to upper
+     *
+     * @param String $str
+     * @return string|string[]
      */
-    public function import()
+    public function parseStrFirstToUpper(String $str)
+    {
+        // Replace
+        $str = str_replace('_', ' ', $str);
+        // First to upper
+        $fc = mb_convert_case(mb_substr($str, 0, 2), MB_CASE_TITLE, 'utf-8');
+        $str[0] = $fc;
+        // Normalize title
+        $str = preg_replace('/(\d+)$/', '($1)', $str);
+        $str = str_replace(['don t', 'Don t'], ['don\'t', 'Don\'t'], $str);
+
+        return $str;
+    }
+
+    /**
+     *  Import tabs, bands from files. Search file into $importCatalog
+     *
+     * @param int $limit
+     * @param bool $debug
+     */
+    public function import($limit = null, $debug = false)
     {
         $paths = Storage::allFiles($this->importCatalog);
 
@@ -137,16 +159,10 @@ class FilesService
             $match[2] = trim($match[2]);
 
             if (count($match) == 3 && strlen($match[1]) && strlen($match[2])) {
-                // Make band with uppercase first char
-                $bandName = mb_convert_case($match[1], MB_CASE_TITLE, 'utf-8');
 
-                // Title
-                $tabTitle = str_replace('_', ' ', $match[2]);
-                $fc = mb_convert_case(mb_substr($tabTitle, 0, 2), MB_CASE_TITLE, 'utf-8');
-                $tabTitle[0] = $fc;
-                // Normalize title
-                $tabTitle = preg_replace('/(\d+)$/', '($1)', $tabTitle);
-                $tabTitle = str_replace(['don t','Don t'], ['don\'t','Don\'t'], $tabTitle);
+                // Make titles with uppercase first char
+                $bandName = self::parseStrFirstToUpper($match[1]);
+                $tabTitle = self::parseStrFirstToUpper($match[2]);
 
                 // Get or create Band
                 $band = Band::firstOrCreate(['name' => $bandName]);
@@ -159,7 +175,8 @@ class FilesService
                 // Delete if exist file
                 Storage::exists($src) && Storage::delete($src);
 
-                Storage::copy($path, $src);
+                // Mode
+                $debug ? Storage::copy($path, $src) : Storage::move($path, $src);
 
                 // Create Tab
                 $tab = Tab::create([
@@ -172,8 +189,15 @@ class FilesService
                     'path' => $path,
                     'band' => $bandName,
                     'title' => $tabTitle,
-                    'tab' => $tab
+                    'tab_id' => $tab->id
                 ];
+
+                // Break logic
+                if (!empty($limit) && count($arSuccess) >= $limit)
+                    break;
+
+                if (count($arSuccess) % 500 == 1)
+                    echo 'import: ' . count($arSuccess) . '...' . PHP_EOL;
             } else {
                 $arErrors[] = [
                     'path' => $path,

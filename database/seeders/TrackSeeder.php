@@ -14,6 +14,7 @@ class TrackSeeder extends Seeder
      */
     public function run()
     {
-        Track::factory(50)->create();
+        if( env('SEED_MODE') === 'dev')
+            Track::factory(50)->create();
     }
 }

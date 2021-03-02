@@ -14,6 +14,7 @@ class TuneSeeder extends Seeder
      */
     public function run()
     {
-        Tune::factory(6)->create();
+        if( env('SEED_MODE') === 'dev')
+            Tune::factory(6)->create();
     }
 }
