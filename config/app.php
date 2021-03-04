@@ -189,6 +189,7 @@ return [
          * App
          */
         App\Providers\FilesServiceProvider::class,
+        App\Providers\TokenServiceProvider::class,
     ],
 
     /*
@@ -243,7 +244,8 @@ return [
         /*
          * App
          */
-        'FilesService' => \App\Services\FilesFacade::class
+        'FilesService' => \App\Services\FilesFacade::class,
+        'TokenService' => \App\Services\TokenFacade::class,
     ],
 
 ];

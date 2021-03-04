@@ -28,11 +28,23 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
     Route::middleware('auth:sanctum')->group( function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('tokens', [AuthController::class, 'tokens'])->name('tokens');
+        Route::get('ability', function (Request $request) {
+
+            //$token = \Illuminate\Support\Facades\Auth::user()->createToken('band-rights', ['band:read','band:write','band:delete']);
+
+
+
+
+            dd([
+                //'token' => $token,
+                'DATA_CREATE' => \Illuminate\Support\Facades\Auth::user()->tokenCan(\App\Services\TokenService::DATA_CREATE),
+                'DATA_DELETE' => \Illuminate\Support\Facades\Auth::user()->tokenCan(\App\Services\TokenService::DATA_DELETE),
+                'DATA_UPDATE' => \Illuminate\Support\Facades\Auth::user()->tokenCan(\App\Services\TokenService::DATA_UPDATE),
+            ]);
+        });
     });
 
     Route::get('test', function (Request $request) {
-
-        \App\Services\FilesFacade::import();
 
         return response()->json([
             'locale' => app()->getLocale(),

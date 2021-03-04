@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Services\TokenFacade;
+use App\Services\TokenService;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -19,6 +21,7 @@ class UserSeeder extends Seeder
             'email' => env('ADMIN_EMAIL'),
             'email_verified_at' => now(),
             'password' => bcrypt(env('ADMIN_PASSWORD')),
+            'abilities' => TokenFacade::serialize(TokenFacade::getAbilities(TokenService::ABILITY_SUPER_ADMIN)),
         ]);
 
         if( env('SEED_MODE') === 'dev') {
@@ -27,6 +30,7 @@ class UserSeeder extends Seeder
                 'email' => 'user@loc.ru',
                 'email_verified_at' => now(),
                 'password' => bcrypt('password'),
+                'abilities' => TokenFacade::serialize(TokenFacade::getAbilities(TokenService::ABILITY_USER)),
             ]);
 
             User::create([
@@ -34,6 +38,7 @@ class UserSeeder extends Seeder
                 'email' => 'manager@loc.ru',
                 'email_verified_at' => now(),
                 'password' => bcrypt('password'),
+                'abilities' => TokenFacade::serialize(TokenFacade::getAbilities(TokenService::ABILITY_USER)),
             ]);
         }
     }

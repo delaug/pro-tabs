@@ -4,11 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\TokenFacade;
+use App\Services\TokenService;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -30,9 +31,10 @@ class AuthController extends Controller
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
+        $input['abilities'] = TokenFacade::serialize(TokenFacade::getAbilities(TokenService::ABILITY_USER));
         $user = User::create($input);
 
-        $token = $user->createToken($input['device_name'])->plainTextToken;
+        $token = $user->createToken($input['device_name'], $input['abilities'])->plainTextToken;
 
         return response()->json(['token' => $token, 'user' => $user], Response::HTTP_OK);
     }
@@ -59,7 +61,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'The provided credentials are incorrect.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        return response()->json(['token' => $user->createToken($request->device_name)->plainTextToken, 'user' => $user]);
+        return response()->json(['token' => $user->createToken($request->device_name, TokenFacade::parse($user->abilities))->plainTextToken, 'user' => $user]);
     }
 
     /**

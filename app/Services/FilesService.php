@@ -43,6 +43,20 @@ class FilesService
     }
 
     /**
+     * @return string
+     */
+    public function getTmpPath() {
+        return $this->tmpPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTabsPath() {
+        return $this->tabsPath;
+    }
+
+    /**
      * Upload file to tmp dir
      *
      * @param UploadedFile $file

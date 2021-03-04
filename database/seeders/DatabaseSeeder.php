@@ -14,12 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        FilesFacade::delete(FilesFacade::getTabsPath());
         switch(env('SEED_MODE')) {
             case 'production':
                 FilesFacade::import();
                 break;
             case 'dev':
-                FilesFacade::import(200, true);
+                FilesFacade::import(20, true);
                 break;
         }
 
