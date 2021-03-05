@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+
 /**
  * Class HttpHelper
  * @package App\Helpers
@@ -18,7 +21,7 @@ class ApiHelper
      * @param int $responseStatus
      * @param mixed $mess
      * @param mixed $err
-     * @return array
+     * @return \Illuminate\Http\Response|JsonResponse
      */
     public static function response($status, $data, $responseStatus, $mess = null, $err = null)
     {
@@ -29,5 +32,35 @@ class ApiHelper
             (is_object($err) || is_array($err) ? 'errors' : 'error') => $err
         ],
         $responseStatus);
+    }
+
+    /**
+     * Return 404 error
+     *
+     * @param string $message
+     * @return \Illuminate\Http\Response
+     */
+    public static function response404($message = 'Resource not found!') {
+        return self::response('error', null, Response::HTTP_NOT_FOUND, null, $message);
+    }
+
+    /**
+     * Return 401 error
+     *
+     * @param string $message
+     * @return \Illuminate\Http\Response
+     */
+    public static function response401($message = 'Unauthorized!') {
+        return self::response('error', null, Response::HTTP_UNAUTHORIZED, null, $message);
+    }
+
+    /**
+     * Return 403 error
+     *
+     * @param string $message
+     * @return \Illuminate\Http\Response
+     */
+    public static function response403($message = 'Forbidden!') {
+        return self::response('error', null, Response::HTTP_FORBIDDEN, null, $message);
     }
 }

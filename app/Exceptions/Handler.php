@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use App\Helpers\ApiHelper;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -52,11 +54,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-
         // This will replace our 404 response with
         // a JSON response.
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Resource not found!');
+            return ApiHelper::response404();
+        }
+
+        // This will replace our 401 response with
+        // a JSON response.
+        if ($exception instanceof AuthenticationException) {
+            return ApiHelper::response401();
         }
 
         return parent::render($request, $exception);
