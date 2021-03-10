@@ -4,10 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ApiHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Instrument\DestroyInstrumentRequest;
+use App\Http\Requests\Instrument\StoreInstrumentRequest;
+use App\Http\Requests\Instrument\UpdateInstrumentRequest;
 use App\Models\Instrument;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 
 class InstrumentController extends Controller
 {
@@ -24,19 +25,12 @@ class InstrumentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Instrument\StoreInstrumentRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreInstrumentRequest $request)
     {
-        $data = Validator::make($request->all(), [
-            'title' => ['required', 'unique:instruments']
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $instrument = Instrument::create($data->validated());
+        $instrument = Instrument::create($request->validated());
         return ApiHelper::response('success', $instrument, Response::HTTP_CREATED, 'Instrument success created!');
     }
 
@@ -57,23 +51,16 @@ class InstrumentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Instrument\UpdateInstrumentRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateInstrumentRequest $request, $id)
     {
         if (!$instrument = Instrument::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Instrument with id: ' . $id . ' not found!');
 
-        $data = Validator::make($request->all(), [
-            'title' => ['required', "unique:instruments,title,{$id}"]
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $instrument->update($data->validated());
+        $instrument->update($request->validated());
 
         return ApiHelper::response('success', $instrument, Response::HTTP_CREATED, 'Instrument success updated!');
     }
@@ -81,10 +68,11 @@ class InstrumentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \App\Http\Requests\Instrument\DestroyInstrumentRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyInstrumentRequest $request, $id)
     {
         if (!$instrument = Instrument::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Instrument with id: ' . $id . ' not found!');

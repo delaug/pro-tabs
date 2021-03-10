@@ -26,7 +26,6 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
     /*
      * Public routes
      */
-
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
 
@@ -47,7 +46,7 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
         'tunes' => TuneController::class,
         'tracks' => TrackController::class,
     ],[
-        'only' => ['index']
+        'only' => ['index','show']
     ]);
 
     Route::post('files/upload', [FileController::class, 'upload']);
@@ -58,17 +57,6 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
     Route::middleware('auth:sanctum')->group( function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('tokens', [AuthController::class, 'tokens'])->name('tokens');
-        Route::get('ability', function (Request $request) {
-
-            //$token = \Illuminate\Support\Facades\Auth::user()->createToken('band-rights', ['band:read','band:write','band:delete']);
-
-            dd([
-                //'token' => $token,
-                'DATA_CREATE' => \Illuminate\Support\Facades\Auth::user()->tokenCan(\App\Services\TokenService::DATA_CREATE),
-                'DATA_DELETE' => \Illuminate\Support\Facades\Auth::user()->tokenCan(\App\Services\TokenService::DATA_DELETE),
-                'DATA_UPDATE' => \Illuminate\Support\Facades\Auth::user()->tokenCan(\App\Services\TokenService::DATA_UPDATE),
-            ]);
-        });
 
         Route::apiResources([
             'bands' => BandController::class,
@@ -77,7 +65,7 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
             'tunes' => TuneController::class,
             'tracks' => TrackController::class,
         ],[
-            'except' => ['index']
+            'except' => ['index','show']
         ]);
 
     });

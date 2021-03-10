@@ -4,10 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ApiHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tune\DestroyTuneRequest;
+use App\Http\Requests\Tune\StoreTuneRequest;
+use App\Http\Requests\Tune\UpdateTuneRequest;
 use App\Models\Tune;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 
 class TuneController extends Controller
 {
@@ -24,19 +25,12 @@ class TuneController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Tune\StoreTuneRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTuneRequest $request)
     {
-        $data = Validator::make($request->all(), [
-            'title' => ['required', 'unique:tunes']
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $tunes = Tune::create($data->validated());
+       $tunes = Tune::create($request->validated());
         return ApiHelper::response('success', $tunes, Response::HTTP_CREATED, 'Tune success created!');
     }
 
@@ -57,23 +51,16 @@ class TuneController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Tune\UpdateTuneRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTuneRequest $request, $id)
     {
         if (!$tunes = Tune::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Tune with id: ' . $id . ' not found!');
 
-        $data = Validator::make($request->all(), [
-            'title' => ['required', "unique:tunes,title,{$id}"]
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $tunes->update($data->validated());
+        $tunes->update($request->validated());
 
         return ApiHelper::response('success', $tunes, Response::HTTP_CREATED, 'Tune success updated!');
     }
@@ -81,10 +68,11 @@ class TuneController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \App\Http\Requests\Tune\DestroyTuneRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyTuneRequest $request, $id)
     {
         if (!$tunes = Tune::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Tune with id: ' . $id . ' not found!');

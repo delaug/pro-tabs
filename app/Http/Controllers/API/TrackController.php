@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ApiHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Track\StoreTrackRequest;
+use App\Http\Requests\Track\UpdateTrackRequest;
 use App\Models\Track;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 
 class TrackController extends Controller
 {
@@ -24,21 +24,12 @@ class TrackController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Track\StoreTrackRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTrackRequest $request)
     {
-        $data = Validator::make($request->all(), [
-            'instrument_id' => ['required', 'exists:instruments,id'],
-            'tune_id' => ['required', 'exists:tunes,id'],
-            'tab_id' => ['required', 'exists:tabs,id'],
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $track = Track::create($data->validated());
+        $track = Track::create($request->validated());
 
         return ApiHelper::response('success', Track::find($track->id), Response::HTTP_CREATED, 'Track success created!');
     }
@@ -60,26 +51,16 @@ class TrackController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Track\UpdateTrackRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTrackRequest $request, $id)
     {
         if (!$track = Track::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Track with id: ' . $id . ' not found!');
 
-        $data = Validator::make($request->all(), [
-            'instrument_id' => ['required', 'exists:instruments,id,deleted_at,NULL'],
-            'tune_id' => ['required', 'exists:tunes,id,deleted_at,NULL'],
-            'tab_id' => ['required', 'exists:tabs,id,deleted_at,NULL'],
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-
-        $track->update($data->validated());
+        $track->update($request->validated());
 
         return ApiHelper::response('success', Track::find($track->id), Response::HTTP_CREATED, 'Track success updated!');
     }
@@ -87,10 +68,11 @@ class TrackController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \App\Http\Requests\Track\DestroyTrackRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyTrackRequest $request, $id)
     {
         if (!$track = Track::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Track with id: ' . $id . ' not found!');

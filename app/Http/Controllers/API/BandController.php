@@ -4,10 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ApiHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Band\DestroyBandRequest;
+use App\Http\Requests\Band\StoreBandRequest;
+use App\Http\Requests\Band\UpdateBandRequest;
 use App\Models\Band;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Validator;
 
 
 class BandController extends Controller
@@ -25,19 +26,12 @@ class BandController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Band\StoreBandRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBandRequest $request)
     {
-        $data = Validator::make($request->all(), [
-            'name' => ['required', 'unique:bands']
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $band = Band::create($data->validated());
+        $band = Band::create($request->validated());
         return ApiHelper::response('success', $band, Response::HTTP_CREATED, 'Band success created!');
     }
 
@@ -58,23 +52,16 @@ class BandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Band\UpdateBandRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateBandRequest $request, $id)
     {
         if (!$band = Band::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Band with id: ' . $id . ' not found!');
 
-        $data = Validator::make($request->all(), [
-            'name' => ['required', "unique:bands,name,{$id}"]
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $band->update($data->validated());
+        $band->update($request->validated());
 
         return ApiHelper::response('success', $band, Response::HTTP_CREATED, 'Band success updated!');
     }
@@ -82,15 +69,16 @@ class BandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \App\Http\Requests\Band\DestroyBandRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyBandRequest $request, $id)
     {
-        if (!$band = Band::find($id))
+        if (!$instrument = Band::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Band with id: ' . $id . ' not found!');
 
-        if (!$band->delete())
+        if (!$instrument->delete())
             return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, null, 'Band can\'t deleted');
 
         return ApiHelper::response('success', null, Response::HTTP_OK, 'Band was deleted!');

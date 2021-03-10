@@ -35,7 +35,7 @@ class ApiHelper
     }
 
     /**
-     * Return 404 error
+     * Return 404:Not found
      *
      * @param string $message
      * @return \Illuminate\Http\Response
@@ -45,7 +45,7 @@ class ApiHelper
     }
 
     /**
-     * Return 401 error
+     * Return 401:Unauthorized error
      *
      * @param string $message
      * @return \Illuminate\Http\Response
@@ -55,12 +55,22 @@ class ApiHelper
     }
 
     /**
-     * Return 403 error
+     * Return 403:Forbidden
      *
      * @param string $message
      * @return \Illuminate\Http\Response
      */
     public static function response403($message = 'Forbidden!') {
         return self::response('error', null, Response::HTTP_FORBIDDEN, null, $message);
+    }
+
+    /**
+     * Return 400:Bad request
+     *
+     * @param string $message
+     * @return \Illuminate\Http\Response
+     */
+    public static function response400($message = 'Bad request!') {
+        return self::response('error', null, Response::HTTP_BAD_REQUEST, null, $message);
     }
 }

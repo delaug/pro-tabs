@@ -4,12 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ApiHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tab\DestroyTabRequest;
+use App\Http\Requests\Tab\StoreTabRequest;
+use App\Http\Requests\Tab\UpdateTabRequest;
 use App\Models\Tab;
 use App\Services\FilesFacade;
 use App\Services\FilesService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 
 class TabController extends Controller
 {
@@ -26,21 +27,12 @@ class TabController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Tab\StoreTabRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTabRequest $request)
     {
-        $data = Validator::make($request->all(), [
-            'title' => ['required'],
-            'src' => ['required'],
-            'band_id' => ['required', 'exists:bands,id'],
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $tab = Tab::create($data->validated());
+        $tab = Tab::create($request->validated());
 
         // Set File
         $src = FilesFacade::move($request->src, $tab->id);
@@ -69,25 +61,16 @@ class TabController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Tab\UpdateTabRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTabRequest $request, $id)
     {
         if (!$tab = Tab::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Tab with id: ' . $id . ' not found!');
 
-        $data = Validator::make($request->all(), [
-            'title' => ['required'],
-            'src' => ['required'],
-            'band_id' => ['required', 'exists:bands,id,deleted_at,NULL'],
-        ]);
-
-        if ($data->fails())
-            return ApiHelper::response('error', null, Response::HTTP_BAD_REQUEST, 'Validation error', $data->errors());
-
-        $tab->update($data->validated());
+        $tab->update($request->validated());
 
         // Set file
         $src = FilesFacade::move($request->src, $tab->id, true);
@@ -102,10 +85,11 @@ class TabController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \App\Http\Requests\Tab\DestroyTabRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyTabRequest $request, $id)
     {
         if (!$tab = Tab::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Tab with id: ' . $id . ' not found!');
