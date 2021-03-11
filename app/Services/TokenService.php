@@ -9,6 +9,8 @@ class TokenService
     public const DATA_SOFT_DELETE = 'data:soft-delete';
     public const DATA_DELETE = 'data:delete';
 
+    public const FILES_UPLOAD = 'files:upload';
+
     public const USERS_READ = 'users:read';
     public const USERS_CREATE = 'users:create';
     public const USERS_UPDATE = 'users:update';
@@ -45,8 +47,8 @@ class TokenService
      */
     public function getAbilities($lvl = self::ABILITY_USER)
     {
-        $abilityUser = [self::DATA_CREATE, self::DATA_UPDATE];
-        $abilityModerator = [self::DATA_SOFT_DELETE];
+        $abilityUser = [];
+        $abilityModerator = [self::DATA_CREATE, self::DATA_UPDATE, self::FILES_UPLOAD, self::DATA_SOFT_DELETE];
         $abilityAdmin = [self::USERS_READ, self::USERS_CREATE, self::USERS_UPDATE, self::USERS_SOFT_DELETE];
         $abilitySuperAdmin = [self::DATA_DELETE, self::USERS_DELETE];
 

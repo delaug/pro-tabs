@@ -49,14 +49,14 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
         'only' => ['index','show']
     ]);
 
-    Route::post('files/upload', [FileController::class, 'upload']);
-
     /*
      * Protected routes
      */
     Route::middleware('auth:sanctum')->group( function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('tokens', [AuthController::class, 'tokens'])->name('tokens');
+
+        Route::post('files/upload', [FileController::class, 'upload']);
 
         Route::apiResources([
             'bands' => BandController::class,
