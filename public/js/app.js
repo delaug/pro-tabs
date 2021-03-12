@@ -70048,7 +70048,8 @@ var Header = function Header() {
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
-    className: "uk-navbar-container"
+    "class": "uk-navbar-container",
+    "uk-navbar": true
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "uk-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -70067,7 +70068,7 @@ var Header = function Header() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["NavLink"], {
     to: Object(_i18n__WEBPACK_IMPORTED_MODULE_5__["GetLocaleURL"])('/'),
     exact: true
-  }, "Tabs")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }, "Tab")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     href: "#"
   }, "New")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     href: "#"
@@ -70078,9 +70079,10 @@ var Header = function Header() {
     exact: true
   }, "About")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "uk-navbar-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "uk-button uk-button-default tm-lang",
-    type: "button"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    className: "uk-navbar-toggle",
+    href: "#",
+    "aria-expanded": "false"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: 'tm-flag ' + i18n.language
   }), i18n.language), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -70400,16 +70402,6 @@ var resources = {
     translation: _locales_ru_translation_json__WEBPACK_IMPORTED_MODULE_4__
   }
 };
-/*i18n.on('languageChanged', function (lng) {
-    // if the language we switched to is the default language we need to remove the /en from URL
-    if (lng === i18n.options.fallbackLng[0]) {
-        if (window.location.pathname.includes('/' + i18n.options.fallbackLng[0])) {
-            const newUrl = window.location.pathname.replace('/' + i18n.options.fallbackLng[0], '')
-            window.location.replace(newUrl)
-        }
-    }
-})*/
-
 i18next__WEBPACK_IMPORTED_MODULE_0__["default"].use(react_i18next__WEBPACK_IMPORTED_MODULE_1__["initReactI18next"]) // passes i18n down to react-i18next
 .use(i18next_browser_languagedetector__WEBPACK_IMPORTED_MODULE_2__["default"]).init({
   resources: resources,
@@ -70426,7 +70418,8 @@ i18next__WEBPACK_IMPORTED_MODULE_0__["default"].use(react_i18next__WEBPACK_IMPOR
   } //debug: true
 
 });
-/* harmony default export */ __webpack_exports__["default"] = (i18next__WEBPACK_IMPORTED_MODULE_0__["default"]);
+/* harmony default export */ __webpack_exports__["default"] = (i18next__WEBPACK_IMPORTED_MODULE_0__["default"]); // Return link with locale /*LANGUAGE*/about
+
 var GetLocaleURL = function GetLocaleURL(path) {
   if (i18next__WEBPACK_IMPORTED_MODULE_0__["default"].language != _variables_general__WEBPACK_IMPORTED_MODULE_5__["appDefaultLanguage"]) return '/' + i18next__WEBPACK_IMPORTED_MODULE_0__["default"].language + path;else return path;
 };
@@ -70469,8 +70462,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appCopyright", function() { return appCopyright; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appLanguages", function() { return appLanguages; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appDefaultLanguage", function() { return appDefaultLanguage; });
-var appName = 'Pro-Tabs';
-var appURL = 'http://pro-tabs.loc/';
+var appName = 'Pro-Tab';
+var appURL = 'http://pro-tabs/';
 var appCopyright = '© 2021. All rights reserved.';
 var appLanguages = ['en', 'ru'];
 var appDefaultLanguage = 'en';
@@ -71043,8 +71036,8 @@ var SignUpPage = function SignUpPage() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\pro-tabs\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\pro-tabs\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\OpenServer\domains\pro-tabs\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\pro-tabs\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
