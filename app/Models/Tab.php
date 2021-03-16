@@ -15,24 +15,28 @@ class Tab extends Model
      *
      * @var array
      */
-    protected $fillable = ['title','src','band_id'];
+    protected $fillable = ['title','band_id','file_id'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = ['band_id'];
+    protected $hidden = ['band_id','file_id'];
 
     /**
      * The relations to eager load on every query.
      *
      * @var array
      */
-    protected $with = ['band'];
+    protected $with = ['band','file'];
 
     public function band() {
         return $this->belongsTo(Band::class);
+    }
+
+    public function file() {
+        return $this->belongsTo(File::class);
     }
 
     public function tracks() {

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTabsTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTabsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tabs', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('title',200);
-            $table->unsignedInteger('downloads')->default(0);
-            $table->unsignedBigInteger('band_id');
-            $table->unsignedBigInteger('file_id');
+            $table->string('path', 256);
+            $table->string('name', 64);
+            $table->string('extension', 16);
+            $table->unsignedInteger('size');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ class CreateTabsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tabs');
+        Schema::dropIfExists('files');
     }
 }

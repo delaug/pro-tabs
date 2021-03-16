@@ -23,8 +23,8 @@ class UpdateTabRequest extends BaseRequest
     {
         return [
             'title' => ['required'],
-            'src' => ['required'],
             'band_id' => ['required', 'exists:bands,id,deleted_at,NULL'],
+            'file_id' => ['required', 'exists:files,id,deleted_at,NULL'],
         ];
     }
 }

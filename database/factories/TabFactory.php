@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Band;
+use App\Models\File;
 use App\Models\Tab;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,9 +25,9 @@ class TabFactory extends Factory
     {
         return [
             'title' => $this->faker->name,
-            'src' => '/storage/'.strtolower($this->faker->firstName.'_'.$this->faker->lastName).'/file.gtp',
             'downloads' => rand(0, 999),
             'band_id' => Band::all()->random(),
+            'file_id' => File::all()->random(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

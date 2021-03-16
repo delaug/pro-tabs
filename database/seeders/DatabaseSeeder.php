@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Services\FilesFacade;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        FilesFacade::delete(FilesFacade::getTabsPath());
+        Storage::deleteDirectory(FilesFacade::getTabsPath());
+
         switch(env('SEED_MODE')) {
             case 'production':
                 FilesFacade::import();
@@ -26,6 +28,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             BandSeeder::class,
+            // FileSeeder::class, // Don't need if used import()
             TabSeeder::class,
             UserSeeder::class,
             TuneSeeder::class,

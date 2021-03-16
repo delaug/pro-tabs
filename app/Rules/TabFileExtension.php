@@ -2,18 +2,12 @@
 
 namespace App\Rules;
 
+use App\Services\FilesFacade;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\UploadedFile;
 
 class TabFileExtension implements Rule
 {
-    /**
-     * Allowed file extensions
-     *
-     * @var string[]
-     */
-    public $allowedExtensions = ['gtp','gp3','gp4','gp5','gpx','gp','mid','midi','xml','mxl','musicxml','txt','tab','btab','ptb','taf'];
-
     /**
      * Create a new rule instance.
      *
@@ -44,7 +38,7 @@ class TabFileExtension implements Rule
             return false;
 
         // Check extension
-        return in_array($ext, $this->allowedExtensions);
+        return in_array($ext, FilesFacade::getAllowedExtensions());
     }
 
     /**
@@ -54,6 +48,6 @@ class TabFileExtension implements Rule
      */
     public function message()
     {
-        return 'The :attribute must be a file of type: '.implode(', ', $this->allowedExtensions);
+        return 'The :attribute must be a file of type: '.implode(', ', FilesFacade::getAllowedExtensions());
     }
 }

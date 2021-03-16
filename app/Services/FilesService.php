@@ -3,123 +3,95 @@
 namespace App\Services;
 
 use App\Models\Band;
+use App\Models\File;
 use App\Models\Tab;
-use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class FilesService
 {
-    public const ERR_TMP_FILE_NOT_FOUND = 1;
-    public const ERR_TAB_FILE_EXIST = 2;
-    public const ERR_CANT_MOVE = 3;
+    /**
+     * Base public path
+     * @var string
+     */
+    private $tabsPath = 'public/tabs';
 
-    public $tmpPath = 'public/tmp';
-    public $tabsPath = 'public/tabs';
     public $importCatalog = 'public/import';
-    public $spacer = '_';
 
     /**
-     * Expire in seconds
+     * Allowed file extensions
      *
-     * @var int
+     * @var string[]
      */
-    public $expire = 30;
+    private $allowedExtensions = ['gtp', 'gp3', 'gp4', 'gp5', 'gpx', 'gp'];
 
     /**
-     * Get text error
+     * Get public path
      *
-     * @param $err
      * @return string
      */
-    public function getErrorText($err)
+    public function getTabsPath()
     {
-        $errors = [
-            1 => 'Tmp file not found',
-            2 => 'Tab file already exist',
-            3 => 'Can\'t move file',
-        ];
-        return $errors[$err];
-    }
-
-    /**
-     * @return string
-     */
-    public function getTmpPath() {
-        return $this->tmpPath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTabsPath() {
         return $this->tabsPath;
     }
 
     /**
-     * Upload file to tmp dir
+     * Get Allowed file Extensions
+     *
+     * @return string[]
+     */
+    public function getAllowedExtensions()
+    {
+        return $this->allowedExtensions;
+    }
+
+    /**
+     * Upload file
      *
      * @param UploadedFile $file
-     * @return array
+     * @return array|bool
      */
     public function upload(UploadedFile $file)
     {
-        $url = $file->storeAs($this->tmpPath, now()->format('YmdHis') . $this->spacer . $file->getClientOriginalName());
-        return ['url' => str_replace($this->tmpPath . '/', '', $url)];
+        $hash = $file->hashName();
+        $path = $file->storeAs($this->tabsPath . '/' . $hash[0], $hash);
+
+        if ($path) {
+            $id = File::create([
+                'path' => $path,
+                'name' => $file->getClientOriginalName(),
+                'extension' => $file->getClientOriginalExtension(),
+                'size' => $file->getSize()
+            ]);
+
+            return [
+                'id' => $id,
+                'path' => str_replace($this->tabsPath . '/', '', $path)
+            ];
+        }
+
+        return false;
     }
 
     /**
-     * Move file from tmp to tab dirs
+     * Download file
      *
-     * @param $url
-     * @param $tab_id
-     * @param bool $force
-     * @return int|string
+     * @param $id
+     * @return array|bool
      */
-    public function move($url, $tab_id, $force = false)
+    public function download($id)
     {
-        // Check tmp file
-        if (!Storage::exists("{$this->tmpPath}/{$url}"))
-            return self::ERR_TMP_FILE_NOT_FOUND;
+        $file = File::find($id);
 
-        $fullName = preg_replace("/.*\//", '', $url);
-        preg_match('/(\d{14})_(.*)/', $fullName, $fileData);
-
-        /*
-         *  1. Get error if exist
-         *  2. Remove file and move new file after that
-         */
-        if (!$force) {
-            // Check tab file
-            if (Storage::exists("{$this->tabsPath}/{$tab_id}/{$fileData[2]}"))
-                return self::ERR_TAB_FILE_EXIST;
-        } else {
-            self::delete("{$this->tabsPath}/{$tab_id}/{$fileData[2]}");
+        if ($file && Storage::exists($file->path)) {
+            return [
+                'id' => $file->id,
+                'path' => str_replace('public', 'storage', $file->path),
+                'name' => $file->name
+            ];
         }
 
-        if (!Storage::move("{$this->tmpPath}/{$url}", "{$this->tabsPath}/{$tab_id}/{$fileData[2]}"))
-            return self::ERR_CANT_MOVE;
-        else
-            return "{$this->tabsPath}/{$tab_id}/{$fileData[2]}";
-    }
-
-    /**
-     *  Check time tmp files and delete if current time older then time create + expire
-     */
-    public function clean()
-    {
-        $tmpFiles = Storage::allFiles($this->tmpPath);
-
-        // Check tmp files
-        foreach ($tmpFiles as $tmpFile) {
-            $fullName = preg_replace("/.*\//", '', $tmpFile);
-            preg_match('/(\d{14})_(.*)/', $fullName, $fileData);
-
-            // Delete expired file
-            if (now() > Carbon::createFromFormat('YmdHis', $fileData[1])->addSecond($this->expire))
-                Storage::delete($tmpFile);
-        }
-
+        return false;
     }
 
     /**
@@ -157,9 +129,8 @@ class FilesService
      *  Import tabs, bands from files. Search file into $importCatalog
      *
      * @param int $limit
-     * @param bool $debug
      */
-    public function import($limit = null, $debug = false)
+    public function import($limit = null)
     {
         $paths = Storage::allFiles($this->importCatalog);
 
@@ -181,22 +152,29 @@ class FilesService
                 // Get or create Band
                 $band = Band::firstOrCreate(['name' => $bandName]);
 
-                // Prepare file
-                $newID = Tab::max('id') + 1;
-                $fileName = preg_replace("/.*\//", '', $path);
-                $src = "{$this->tabsPath}/{$newID}/{$fileName}";
+                // File prepare data
+                $storagePath = storage_path('app/' . $path);
 
-                // Delete if exist file
-                Storage::exists($src) && Storage::delete($src);
+                $fileHash = \Illuminate\Support\Facades\File::hash($storagePath) . '.bin';
+                $fileName = \Illuminate\Support\Facades\File::name($storagePath);
+                $fileExtension = \Illuminate\Support\Facades\File::extension($storagePath);
+                $fileSize = \Illuminate\Support\Facades\File::size($storagePath);
+                $fileNewPath = $this->tabsPath . '/' . $fileHash[0] . '/' . $fileHash;
+                Storage::copy($path, $fileNewPath);
 
-                // Mode
-                $debug ? Storage::copy($path, $src) : Storage::move($path, $src);
+                // Create File
+                $file = File::create([
+                    'path' => $fileNewPath,
+                    'name' => $fileName . '.' . $fileExtension,
+                    'extension' => $fileExtension,
+                    'size' => $fileSize
+                ]);
 
                 // Create Tab
                 $tab = Tab::create([
                     'title' => $tabTitle,
                     'band_id' => $band->id,
-                    'src' => $src,
+                    'file_id' => $file->id,
                 ]);
 
                 $arSuccess[] = [

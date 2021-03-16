@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\File;
 use App\Models\Tab;
 use Illuminate\Database\Seeder;
 
@@ -17,117 +18,117 @@ class TabSeeder extends Seeder
         if( env('SEED_MODE') === 'dev') {
             Tab::create([
                 'title' => 'Unchain Utopia',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 1,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Unleashed',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 1,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Wishmaster',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 2,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Sleeping Sun',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 2,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'End of all hope',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 2,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Hearth like a grave',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 3,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Full moon',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 4,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Open my grave',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 4,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Всадник из льда',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 5,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Колизей',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 6,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Чему веришь ты',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 7,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Gallow tree',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 8,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Downfall',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 9,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Lai Lai Hei',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 10,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Sonne',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 11,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Fully Alive',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 12,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Innis Mona',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 13,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Never To Late',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 14,
+                'file_id' => File::all()->random()->id,
             ]);
             Tab::create([
                 'title' => 'Frozen',
-                'src' => '/storage/rosalia_jakubowski/file.gtp',
                 'downloads' => rand(0, 999),
                 'band_id' => 15,
+                'file_id' => File::all()->random()->id,
             ]);
         }
     }

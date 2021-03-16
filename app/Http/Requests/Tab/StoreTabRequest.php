@@ -23,8 +23,8 @@ class StoreTabRequest extends BaseRequest
     {
         return [
             'title' => ['required'],
-            'src' => ['required'],
             'band_id' => ['required', 'exists:bands,id'],
+            'file_id' => ['required', 'exists:files,id'],
         ];
     }
 }

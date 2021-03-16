@@ -29,6 +29,8 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
 
+    Route::get('files/{file}', [FileController::class, 'download']);
+
     Route::get('test', function (Request $request) {
 
         return response()->json([
@@ -56,7 +58,7 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('tokens', [AuthController::class, 'tokens'])->name('tokens');
 
-        Route::post('files/upload', [FileController::class, 'upload']);
+        Route::post('files', [FileController::class, 'upload']);
 
         Route::apiResources([
             'bands' => BandController::class,
