@@ -57,17 +57,12 @@ class FilesService
         $path = $file->storeAs($this->tabsPath . '/' . $hash[0], $hash);
 
         if ($path) {
-            $id = File::create([
+            return File::create([
                 'path' => $path,
                 'name' => $file->getClientOriginalName(),
                 'extension' => $file->getClientOriginalExtension(),
                 'size' => $file->getSize()
             ]);
-
-            return [
-                'id' => $id,
-                'path' => str_replace($this->tabsPath . '/', '', $path)
-            ];
         }
 
         return false;
@@ -84,13 +79,16 @@ class FilesService
         $file = File::find($id);
 
         if ($file && Storage::exists($file->path)) {
+
+            // Increment download count
+            $file->increment('downloads');
+
             return [
                 'id' => $file->id,
                 'path' => str_replace('public', 'storage', $file->path),
                 'name' => $file->name
             ];
         }
-
         return false;
     }
 

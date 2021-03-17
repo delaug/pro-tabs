@@ -16,7 +16,6 @@ class CreateTabsTable extends Migration
         Schema::create('tabs', function (Blueprint $table) {
             $table->id();
             $table->string('title',200);
-            $table->unsignedInteger('downloads')->default(0);
             $table->unsignedBigInteger('band_id');
             $table->unsignedBigInteger('file_id');
             $table->softDeletes();

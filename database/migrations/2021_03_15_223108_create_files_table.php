@@ -19,6 +19,7 @@ class CreateFilesTable extends Migration
             $table->string('name', 64);
             $table->string('extension', 16);
             $table->unsignedInteger('size');
+            $table->unsignedInteger('downloads')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

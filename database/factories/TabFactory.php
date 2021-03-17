@@ -25,7 +25,6 @@ class TabFactory extends Factory
     {
         return [
             'title' => $this->faker->name,
-            'downloads' => rand(0, 999),
             'band_id' => Band::all()->random(),
             'file_id' => File::all()->random(),
             'created_at' => now(),
