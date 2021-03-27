@@ -21,7 +21,7 @@ class TabController extends Controller
      */
     public function index()
     {
-        return ApiHelper::response('success', Tab::get(), Response::HTTP_OK);
+        return ApiHelper::response('success', Tab::with(['band','file','tracks'])->get(), Response::HTTP_OK);
     }
 
     /**
@@ -41,7 +41,7 @@ class TabController extends Controller
         else
             $tab->update(['src' => $src]);
 
-        return ApiHelper::response('success', Tab::find($tab->id), Response::HTTP_CREATED, 'Tab success created!');
+        return ApiHelper::response('success', Tab::with(['band','file','tracks'])->find($tab->id), Response::HTTP_CREATED, 'Tab success created!');
     }
 
     /**
@@ -52,7 +52,7 @@ class TabController extends Controller
      */
     public function show($id)
     {
-        if (!$tab = Tab::find($id))
+        if (!$tab = Tab::with(['band','file','tracks'])->find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Tab with id: ' . $id . ' not found!');
 
         return ApiHelper::response('success', $tab, Response::HTTP_OK);
@@ -79,7 +79,7 @@ class TabController extends Controller
         else
             $tab->update(['src' => $src]);
 
-        return ApiHelper::response('success', Tab::find($tab->id), Response::HTTP_CREATED, 'Tab success updated!');
+        return ApiHelper::response('success', Tab::with(['band','file','tracks'])->find($tab->id), Response::HTTP_CREATED, 'Tab success updated!');
     }
 
     /**

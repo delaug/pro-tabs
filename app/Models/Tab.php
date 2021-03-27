@@ -24,13 +24,6 @@ class Tab extends Model
      */
     protected $hidden = ['band_id','file_id'];
 
-    /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = ['band','file'];
-
     public function band() {
         return $this->belongsTo(Band::class);
     }

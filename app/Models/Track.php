@@ -29,7 +29,7 @@ class Track extends Model
      *
      * @var array
      */
-    protected $with = ['instrument','tune','tab'];
+    protected $with = ['instrument','tune'];
 
     public function tab() {
         return $this->belongsTo(Tab::class);
