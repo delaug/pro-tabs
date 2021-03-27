@@ -8,6 +8,7 @@ use App\Http\Requests\Instrument\DestroyInstrumentRequest;
 use App\Http\Requests\Instrument\StoreInstrumentRequest;
 use App\Http\Requests\Instrument\UpdateInstrumentRequest;
 use App\Models\Instrument;
+use App\Models\InstrumentTranslations;
 use Illuminate\Http\Response;
 
 class InstrumentController extends Controller
@@ -30,8 +31,15 @@ class InstrumentController extends Controller
      */
     public function store(StoreInstrumentRequest $request)
     {
-        $instrument = Instrument::create($request->validated());
-        return ApiHelper::response('success', $instrument, Response::HTTP_CREATED, 'Instrument success created!');
+        $instrument = Instrument::create([]);
+        $instrument
+            ->translations()
+            ->createMany([
+                ['lang' => 'en', 'title' => $request->validated()['title']['en']],
+                ['lang' => 'ru', 'title' => !empty($request->validated()['title']['ru']) ? $request->validated()['title']['ru'] : '']
+            ]);
+
+        return ApiHelper::response('success', Instrument::find($instrument->id), Response::HTTP_CREATED, 'Instrument success created!');
     }
 
     /**
@@ -60,9 +68,18 @@ class InstrumentController extends Controller
         if (!$instrument = Instrument::find($id))
             return ApiHelper::response('error', null, Response::HTTP_NOT_FOUND, null, 'Instrument with id: ' . $id . ' not found!');
 
-        $instrument->update($request->validated());
+        // Update translations
+        foreach ($instrument->translations as $t) {
+            // Check allowed languages
+            if (!in_array($t->lang, config('app.locale_list')))
+                continue;
 
-        return ApiHelper::response('success', $instrument, Response::HTTP_CREATED, 'Instrument success updated!');
+            $newTitle = !empty($request->validated()['title'][$t->lang]) ? $request->validated()['title'][$t->lang] : '';
+
+            InstrumentTranslations::where(['id' => $t->id, 'lang' => $t->lang])->update(['title' => $newTitle]);
+        }
+
+        return ApiHelper::response('success', Instrument::find($instrument->id), Response::HTTP_CREATED, 'Instrument success updated!');
     }
 
     /**

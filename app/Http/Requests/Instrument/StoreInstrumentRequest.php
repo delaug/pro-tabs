@@ -22,7 +22,8 @@ class StoreInstrumentRequest extends BaseRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'unique:instruments']
+            'title.en' => ['required', 'unique:instrument_translations,title'],
+            'title.ru' => ['nullable'],
         ];
     }
 }

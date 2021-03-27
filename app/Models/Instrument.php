@@ -11,13 +11,17 @@ class Instrument extends Model
     use HasFactory, SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
+     * The relations to eager load on every query.
      *
      * @var array
      */
-    protected $fillable = ['title'];
+    protected $with = ['translations'];
 
     public function tracks() {
-        $this->hasMany(Track::class);
+        return $this->hasMany(Track::class);
+    }
+
+    public function translations() {
+        return $this->hasMany(InstrumentTranslations::class);
     }
 }

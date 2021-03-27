@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Instrument;
 
 use App\Http\Requests\BaseRequest;
+use App\Models\InstrumentTranslations;
 use App\Services\TokenService;
 
 class UpdateInstrumentRequest extends BaseRequest
@@ -21,8 +22,13 @@ class UpdateInstrumentRequest extends BaseRequest
      */
     public function rules()
     {
+        // Find translation
+        $instrumentTransitionsEn = InstrumentTranslations::where(['lang' => 'en', 'instrument_id' => $this->instrument])->select('id')->first();
+        $id = $instrumentTransitionsEn ? $instrumentTransitionsEn->id : false;
+
         return [
-            'title' => ['required', "unique:instruments,name,{$this->instrument}"]
+            'title.en' => ['required', "unique:instrument_translations,title,{$id}"],
+            'title.ru' => ['nullable'],
         ];
     }
 }

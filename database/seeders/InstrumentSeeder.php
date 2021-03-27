@@ -14,7 +14,19 @@ class InstrumentSeeder extends Seeder
      */
     public function run()
     {
-        if( env('SEED_MODE') === 'dev')
-            Instrument::factory(3)->create();
+        // Electric Guitar
+        Instrument::create([]);
+        // Acoustic Guitar
+        Instrument::create([]);
+        // Bass Guitar
+        Instrument::create([]);
+        // Drums
+        Instrument::create([]);
+        // Keyboards
+        Instrument::create([]);
+        // Violin
+        Instrument::create([]);
+        // Vocals
+        Instrument::create([]);
     }
 }

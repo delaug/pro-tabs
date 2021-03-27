@@ -18,6 +18,6 @@ class Tune extends Model
     protected $fillable = ['title'];
 
     public function tracks() {
-        $this->hasMany(Track::class);
+        return $this->hasMany(Track::class);
     }
 }

@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TuneSeeder::class,
             InstrumentSeeder::class,
+            InstrumentTranslationsSeeder::class,
             TrackSeeder::class,
         ]);
     }
