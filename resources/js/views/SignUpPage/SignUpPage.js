@@ -3,6 +3,8 @@ import {appName} from "../../variables/general"
 import {NavLink, useHistory} from "react-router-dom";
 import {AuthContext} from "../../context/auth/authContext";
 import {GetLocaleURL} from "../../i18n";
+import {Header} from "../../components/Header/Header";
+import {Footer} from "../../components/Footer/Footer";
 
 const useRegistrationForm = () => {
     const [values, setValues] = useState({
@@ -47,7 +49,7 @@ const useRegistrationForm = () => {
                 })
                 .catch(error => {
                     setLoading(false)
-                    if(error.response.data.errors != undefined)
+                    if (error.response.data.errors != undefined)
                         setErrors(error.response.data.errors)
                     else
                         UIkit.notification({
@@ -95,107 +97,122 @@ export const SignUpPage = () => {
     const {values, errors, isLoading, handleChange, handleSubmit} = useRegistrationForm()
 
     return (
-        <div className="uk-position-center">
-            <div className="uk-card uk-card-default uk-card-hover uk-card-body uk-width-large">
-                <NavLink
-                    className="uk-flex uk-flex-center"
-                    to={GetLocaleURL('/')}
-                    exact
-                >
-                    <img src="/favicon.ico" alt=""/>
-                </NavLink>
-                <p className="uk-card-title uk-flex uk-flex-center"> Sign up to {appName}</p>
-                <form className="uk-form-stacked">
-                    <div className="uk-margin">
-                        <label className="uk-form-label" htmlFor="name">Name</label>
-                        <div className="uk-form-controls">
-                            <div className="uk-form-controls">
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    className={"uk-input " + (errors.name && "uk-form-danger")}
-                                    placeholder="Name"
-                                    value={values.name}
-                                    onChange={handleChange}
-                                />
-                                {errors.name && <small className={errors.name && "uk-text-danger"}>{errors.name}</small>}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="uk-margin">
-                        <label className="uk-form-label" htmlFor="email">Email</label>
-                        <div className="uk-form-controls">
-                            <div className="uk-form-controls">
-                                <input
-                                    type="text"
-                                    id="email"
-                                    name="email"
-                                    className={"uk-input " + (errors.email && "uk-form-danger")}
-                                    placeholder="Email"
-                                    value={values.email}
-                                    onChange={handleChange}
-                                />
-                                {errors.email && <small className={errors.email && "uk-text-danger"}>{errors.email}</small>}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="uk-margin">
-                        <label className="uk-form-label" htmlFor="password">Password</label>
-                        <div className="uk-form-controls">
-                            <div className="uk-form-controls">
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    className={"uk-input " + (errors.password && "uk-form-danger")}
-                                    placeholder="Password"
-                                    value={values.password}
-                                    onChange={handleChange}
-                                />
-                                {errors.password && <small className={errors.password && "uk-text-danger"}>{errors.password}</small>}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="uk-margin">
-                        <label className="uk-form-label" htmlFor="password_confirmation">Confirmation</label>
-                        <div className="uk-form-controls">
-                            <div className="uk-form-controls">
-                                <input
-                                    type="password"
-                                    id="password_confirmation"
-                                    name="password_confirmation"
-                                    className={"uk-input " + (errors.password_confirmation && "uk-form-danger")}
-                                    placeholder="Password confirmation"
-                                    value={values.password_confirmation}
-                                    onChange={handleChange}
-                                />
-                                {errors.password_confirmation && <small className={errors.password_confirmation && "uk-text-danger"}>{errors.password_confirmation}</small>}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="uk-margin">
-                        { !isLoading ? (
-                            <button
-                                className="uk-button uk-button-primary uk-width-1-1"
-                                type="button"
-                                onClick={handleSubmit}
+        <>
+            <Header/>
+            <div className="uk-container">
+                <div className="uk-padding uk-padding-remove-horizontal">
+                    <div className="uk-flex uk-flex-center uk-flex-middle">
+                        <div className="uk-card uk-card-default uk-card-hover uk-card-body uk-width-large">
+                            <NavLink
+                                className="uk-flex uk-flex-center"
+                                to={GetLocaleURL('/')}
+                                exact
                             >
-                                Sign Up
-                            </button>
-                        ) : (
-                            <button className="uk-button uk-button-primary uk-width-1-1" type="button" disabled>
-                                <span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                                &nbsp;Loading...
-                            </button>
-                        )}
+                                <img src="/favicon.ico" alt=""/>
+                            </NavLink>
+                            <p className="uk-card-title uk-flex uk-flex-center"> Sign up to {appName}</p>
+                            <form className="uk-form-stacked">
+                                <div className="uk-margin">
+                                    <label className="uk-form-label" htmlFor="name">Name</label>
+                                    <div className="uk-form-controls">
+                                        <div className="uk-form-controls">
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                className={"uk-input " + (errors.name && "uk-form-danger")}
+                                                placeholder="Name"
+                                                value={values.name}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.name &&
+                                            <small className={errors.name && "uk-text-danger"}>{errors.name}</small>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="uk-margin">
+                                    <label className="uk-form-label" htmlFor="email">Email</label>
+                                    <div className="uk-form-controls">
+                                        <div className="uk-form-controls">
+                                            <input
+                                                type="text"
+                                                id="email"
+                                                name="email"
+                                                className={"uk-input " + (errors.email && "uk-form-danger")}
+                                                placeholder="Email"
+                                                value={values.email}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.email &&
+                                            <small className={errors.email && "uk-text-danger"}>{errors.email}</small>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="uk-margin">
+                                    <label className="uk-form-label" htmlFor="password">Password</label>
+                                    <div className="uk-form-controls">
+                                        <div className="uk-form-controls">
+                                            <input
+                                                type="password"
+                                                id="password"
+                                                name="password"
+                                                className={"uk-input " + (errors.password && "uk-form-danger")}
+                                                placeholder="Password"
+                                                value={values.password}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.password && <small
+                                                className={errors.password && "uk-text-danger"}>{errors.password}</small>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="uk-margin">
+                                    <label className="uk-form-label"
+                                           htmlFor="password_confirmation">Confirmation</label>
+                                    <div className="uk-form-controls">
+                                        <div className="uk-form-controls">
+                                            <input
+                                                type="password"
+                                                id="password_confirmation"
+                                                name="password_confirmation"
+                                                className={"uk-input " + (errors.password_confirmation && "uk-form-danger")}
+                                                placeholder="Password confirmation"
+                                                value={values.password_confirmation}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.password_confirmation && <small
+                                                className={errors.password_confirmation && "uk-text-danger"}>{errors.password_confirmation}</small>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="uk-margin">
+                                    {!isLoading ? (
+                                        <button
+                                            className="uk-button uk-button-primary uk-width-1-1"
+                                            type="button"
+                                            onClick={handleSubmit}
+                                        >
+                                            Sign Up
+                                        </button>
+                                    ) : (
+                                        <button className="uk-button uk-button-primary uk-width-1-1" type="button"
+                                                disabled>
+                                        <span className="spinner-grow spinner-grow-sm" role="status"
+                                              aria-hidden="true"></span>
+                                            &nbsp;Loading...
+                                        </button>
+                                    )}
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+            <Footer/>
+        </>
     )
 }

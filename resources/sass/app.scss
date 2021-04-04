@@ -12,7 +12,7 @@ body {
     margin-bottom: 80px;
 }
 .footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     line-height: 0px;
@@ -33,6 +33,9 @@ body {
     position: relative;
     top: 3px;
     right: 3px;
+}
+.tm-flag-icon {
+    position: static;
 }
 .en {
     background-image: url("/img/flags/en-icon-16.png");
