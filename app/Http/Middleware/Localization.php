@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Language;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -10,8 +11,8 @@ class Localization
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -19,9 +20,9 @@ class Localization
         $locale = config('app.locale');
 
         // Check header request and determine localizaton
-        if($request->hasHeader('Content-Language')) {
+        if ($request->hasHeader('Content-Language')) {
             // Check localization is configured in the application
-            if(is_array(config('app.locale_list')) && in_array($request->header('Content-Language'), config('app.locale_list')))
+            if (Language::where('code', $request->header('Content-Language'))->exists())
                 $locale = $request->header('Content-Language');
         }
 

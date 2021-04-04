@@ -9,6 +9,7 @@ use App\Http\Requests\Instrument\StoreInstrumentRequest;
 use App\Http\Requests\Instrument\UpdateInstrumentRequest;
 use App\Models\Instrument;
 use App\Models\InstrumentTranslations;
+use App\Models\Language;
 use Illuminate\Http\Response;
 
 class InstrumentController extends Controller
@@ -31,13 +32,21 @@ class InstrumentController extends Controller
      */
     public function store(StoreInstrumentRequest $request)
     {
+        $languages = Language::get();
+
+        // Makes translations data for all languages
+        $instrumentTranslations = [];
+        foreach ($languages as $language) {
+            $instrumentTranslations[] = [
+                'language_id' => $language->id,
+                'title' => !empty($request->validated()['title'][$language->code]) ? $request->validated()['title'][$language->code] : ''
+            ];
+        }
+
         $instrument = Instrument::create([]);
         $instrument
             ->translations()
-            ->createMany([
-                ['lang' => 'en', 'title' => $request->validated()['title']['en']],
-                ['lang' => 'ru', 'title' => !empty($request->validated()['title']['ru']) ? $request->validated()['title']['ru'] : '']
-            ]);
+            ->createMany($instrumentTranslations);
 
         return ApiHelper::response('success', Instrument::find($instrument->id), Response::HTTP_CREATED, 'Instrument success created!');
     }
@@ -70,13 +79,8 @@ class InstrumentController extends Controller
 
         // Update translations
         foreach ($instrument->translations as $t) {
-            // Check allowed languages
-            if (!in_array($t->lang, config('app.locale_list')))
-                continue;
-
-            $newTitle = !empty($request->validated()['title'][$t->lang]) ? $request->validated()['title'][$t->lang] : '';
-
-            InstrumentTranslations::where(['id' => $t->id, 'lang' => $t->lang])->update(['title' => $newTitle]);
+            $newTitle = !empty($request->validated()['title'][$t->language->code]) ? $request->validated()['title'][$t->language->code] : '';
+            InstrumentTranslations::where(['id' => $t->id])->update(['title' => $newTitle]);
         }
 
         return ApiHelper::response('success', Instrument::find($instrument->id), Response::HTTP_CREATED, 'Instrument success updated!');

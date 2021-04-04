@@ -23,7 +23,7 @@ class UpdateInstrumentRequest extends BaseRequest
     public function rules()
     {
         // Find translation
-        $instrumentTransitionsEn = InstrumentTranslations::where(['lang' => 'en', 'instrument_id' => $this->instrument])->select('id')->first();
+        $instrumentTransitionsEn = InstrumentTranslations::where(['language_id' => 1, 'instrument_id' => $this->instrument])->select('id')->first();
         $id = $instrumentTransitionsEn ? $instrumentTransitionsEn->id : false;
 
         return [

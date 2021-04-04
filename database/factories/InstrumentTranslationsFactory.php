@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\InstrumentTranslations;
+use App\Models\Language;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InstrumentTranslationsFactory extends Factory
@@ -38,7 +39,7 @@ class InstrumentTranslationsFactory extends Factory
                 'Violin',
                 'Vocals',
             ]),
-            'lang' => $this->faker->unique()->randomElement(config('app.locale_list')),
+            'language_id' => Language::all()->random(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

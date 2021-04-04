@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
+            LanguageSeeder::class,
             BandSeeder::class,
             // FileSeeder::class, // Don't need if used import()
             TabSeeder::class,

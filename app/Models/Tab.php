@@ -17,13 +17,6 @@ class Tab extends Model
      */
     protected $fillable = ['title','band_id','file_id'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = ['band_id','file_id'];
-
     public function band() {
         return $this->belongsTo(Band::class);
     }

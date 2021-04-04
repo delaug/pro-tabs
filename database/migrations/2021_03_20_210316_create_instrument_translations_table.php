@@ -16,11 +16,12 @@ class CreateInstrumentTranslationsTable extends Migration
         Schema::create('instrument_translations', function (Blueprint $table) {
             $table->id();
             $table->string('title', 256);
-            $table->string('lang', 8);
+            $table->unsignedBigInteger('language_id');
             $table->unsignedBigInteger('instrument_id');
             $table->softDeletes();
             $table->timestamps();
 
+            $table->foreign('language_id')->references('id')->on('languages')->onDelete('cascade');
             $table->foreign('instrument_id')->references('id')->on('instruments')->onDelete('cascade');
         });
     }

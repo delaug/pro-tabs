@@ -15,16 +15,22 @@ class InstrumentTranslations extends Model
      *
      * @var array
      */
-    protected $fillable = ['title','lang','instrument_id'];
+    protected $fillable = ['title', 'language_id', 'instrument_id'];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The relations to eager load on every query.
      *
      * @var array
      */
-    protected $hidden = ['instrument_id'];
+    protected $with = ['language'];
 
-    public function instrument() {
+    public function language()
+    {
+        return $this->belongsTo(Language::class);
+    }
+
+    public function instrument()
+    {
         return $this->belongsTo(Instrument::class);
     }
 }

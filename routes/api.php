@@ -10,6 +10,7 @@ use App\Http\Controllers\API\TuneController;
 use App\Http\Controllers\API\TabController;
 use App\Http\Controllers\API\TrackController;
 use App\Http\Controllers\API\FileController;
+use App\Http\Controllers\API\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,7 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
 
         return response()->json([
             'locale' => app()->getLocale(),
-            'locale_list' => config('app.locale_list'),
+            'locale_list' => \App\Models\Language::pluck('code'),
             'Tabs' => \App\Models\Tab::with(['band','tracks.tune','tracks.instrument'])->get()->all(),
             'Tracks' => \App\Models\Track::with(['instrument','tune'])->get()->all(),
         ]);
@@ -47,6 +48,7 @@ Route::prefix('v1')->middleware(['localization'])->group( function() {
         'instruments' => InstrumentController::class,
         'tunes' => TuneController::class,
         'tracks' => TrackController::class,
+        'languages' => LanguageController::class,
     ],[
         'only' => ['index','show']
     ]);

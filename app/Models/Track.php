@@ -18,13 +18,6 @@ class Track extends Model
     protected $fillable = ['instrument_id','tune_id','tab_id'];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = ['instrument_id','tune_id','tab_id'];
-
-    /**
      * The relations to eager load on every query.
      *
      * @var array
